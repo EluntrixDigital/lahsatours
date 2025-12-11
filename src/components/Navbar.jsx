@@ -13,7 +13,7 @@ const Navbar = () => {
             <img 
               src={logo} 
               alt="Lahsa Tours Logo" 
-              className="h-16 w-auto object-contain"
+              className="h-40 w-auto object-contain"
             />
           </div>
           
