@@ -89,7 +89,7 @@ const Features = () => {
               Ready to Start Your Journey?
             </h3>
             <p className="text-xl text-white/90 mb-8">
-              Join thousands of satisfied travelers and experience the world with Lahsa Tours
+              Join thousands of satisfied travelers and experience the world with Varanasi Tours
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <button className="bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] uppercase tracking-wide">

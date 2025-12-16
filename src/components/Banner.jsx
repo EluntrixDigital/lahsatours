@@ -1,18 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import { Search, Calendar, MapPin } from 'lucide-react'
 
-const Banner = () => {
+const Banner = ({ onSearch }) => {
   const [formData, setFormData] = useState({
-    from: '',
     to: '',
-    date: '',
-    passengers: '1'
+    date: ''
   })
+  const [availableCities, setAvailableCities] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        // Fetch packages for destination cities
+        const packagesSnapshot = await getDocs(collection(db, 'holidayPackages'))
+        const packageLocations = new Set()
+        packagesSnapshot.docs.forEach(doc => {
+          const data = doc.data()
+          if (data.location) {
+            packageLocations.add(data.location)
+          }
+        })
+
+        // Sort locations
+        const sortedLocations = Array.from(packageLocations).sort()
+        setAvailableCities(sortedLocations)
+      } catch (error) {
+        console.error('Error fetching cities:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCities()
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Search submitted:', formData)
-    // Handle search logic here
+    if (onSearch) {
+      onSearch(formData)
+    }
+    // Scroll to packages section
+    const packagesSection = document.getElementById('packages')
+    if (packagesSection) {
+      packagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   const handleChange = (e) => {
@@ -88,39 +122,25 @@ const Banner = () => {
           {/* Search Form */}
           <div className="max-w-5xl mx-auto">
             <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-2xl p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-                {/* From */}
-                <div className="relative">
-                  <label className="block text-xs font-bold text-gray-700 mb-2 md:mb-2.5 uppercase tracking-wide">
-                    <MapPin className="inline h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-1.5 text-primary-600" />
-                    From
-                  </label>
-                  <input
-                    type="text"
-                    name="from"
-                    value={formData.from}
-                    onChange={handleChange}
-                    placeholder="Departure city"
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition text-gray-900 font-medium text-sm md:text-base"
-                    required
-                  />
-                </div>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 {/* To */}
                 <div className="relative">
                   <label className="block text-xs font-bold text-gray-700 mb-2 md:mb-2.5 uppercase tracking-wide">
                     <MapPin className="inline h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-1.5 text-primary-600" />
                     To
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="to"
                     value={formData.to}
                     onChange={handleChange}
-                    placeholder="Destination city"
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition text-gray-900 font-medium text-sm md:text-base"
+                    className="w-full px-3 py-2.5 md:px-4 md:py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition text-gray-900 font-medium bg-white text-sm md:text-base"
                     required
-                  />
+                  >
+                    <option value="">Destination city</option>
+                    {availableCities.map((city, index) => (
+                      <option key={index} value={city}>{city}</option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Date */}
@@ -134,26 +154,10 @@ const Banner = () => {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
+                    min={new Date().toISOString().split('T')[0]}
                     className="w-full px-3 py-2.5 md:px-4 md:py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition text-gray-900 font-medium text-sm md:text-base"
                     required
                   />
-                </div>
-
-                {/* Passengers */}
-                <div className="relative">
-                  <label className="block text-xs font-bold text-gray-700 mb-2 md:mb-2.5 uppercase tracking-wide">
-                    Passengers
-                  </label>
-                  <select
-                    name="passengers"
-                    value={formData.passengers}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition text-gray-900 font-medium bg-white text-sm md:text-base"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                      <option key={num} value={num}>{num} {num === 1 ? 'Passenger' : 'Passengers'}</option>
-                    ))}
-                  </select>
                 </div>
               </div>
 

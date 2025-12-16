@@ -1,180 +1,60 @@
-import React from 'react'
-import { Car, Users, Fuel, Settings, Star, ArrowRight, Shield, Gauge, Calendar, MapPin } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../firebase/config'
+import { Car, Users, Fuel, Settings, Star, ArrowRight, Shield, Gauge, Calendar, MapPin, X } from 'lucide-react'
 
-const CarRental = () => {
-  const cars = [
-    {
-      id: 1,
-      name: "Toyota Innova Crysta",
-      category: "Premium Taxi",
-      price: 2499,
-      originalPrice: 2999,
-      rating: 4.8,
-      reviews: 2847,
-      year: 2023,
-      mileage: "25,000 km",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop",
-      features: ["Manual/Automatic", "7 Seats", "AC", "GPS Navigation", "Spacious", "Reliable"],
-      fuel: "Diesel",
-      transmission: "Manual/Automatic",
-      insurance: "Included",
-      seats: 7,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune"]
-    },
-    {
-      id: 2,
-      name: "Maruti Swift Dzire",
-      category: "Economy Taxi",
-      price: 1299,
-      originalPrice: 1599,
-      rating: 4.6,
-      reviews: 3421,
-      year: 2023,
-      mileage: "30,000 km",
-      image: "https://images.unsplash.com/photo-1606664515525-b6b8906a5bf8?w=800&h=600&fit=crop",
-      features: ["Manual", "5 Seats", "AC", "Fuel Efficient", "Compact", "Easy Parking"],
-      fuel: "Petrol/CNG",
-      transmission: "Manual",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Pune", "Kolkata", "Ahmedabad"]
-    },
-    {
-      id: 3,
-      name: "Honda City",
-      category: "Sedan Taxi",
-      price: 1899,
-      originalPrice: 2299,
-      rating: 4.7,
-      reviews: 2156,
-      year: 2023,
-      mileage: "22,000 km",
-      image: "https://images.unsplash.com/photo-1621007947382-bb3c399107e3?w=800&h=600&fit=crop",
-      features: ["Manual/Automatic", "5 Seats", "AC", "Comfortable", "Spacious Boot", "Premium Interior"],
-      fuel: "Petrol",
-      transmission: "Manual/Automatic",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai"]
-    },
-    {
-      id: 4,
-      name: "Maruti Ertiga",
-      category: "MPV Taxi",
-      price: 1799,
-      originalPrice: 2199,
-      rating: 4.5,
-      reviews: 1892,
-      year: 2023,
-      mileage: "28,000 km",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop",
-      features: ["Manual", "7 Seats", "AC", "Fuel Efficient", "Spacious", "Family Friendly"],
-      fuel: "Petrol/CNG",
-      transmission: "Manual",
-      insurance: "Included",
-      seats: 7,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Pune", "Kolkata"]
-    },
-    {
-      id: 5,
-      name: "Mahindra XUV500",
-      category: "SUV Taxi",
-      price: 2999,
-      originalPrice: 3499,
-      rating: 4.6,
-      reviews: 1234,
-      year: 2023,
-      mileage: "20,000 km",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop",
-      features: ["Manual/Automatic", "7 Seats", "AC", "4WD", "Premium Features", "Spacious"],
-      fuel: "Diesel",
-      transmission: "Manual/Automatic",
-      insurance: "Included",
-      seats: 7,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Pune"]
-    },
-    {
-      id: 6,
-      name: "Mercedes-Benz E-Class",
-      category: "Luxury",
-      price: 7387,
-      originalPrice: 8500,
-      rating: 4.9,
-      reviews: 342,
-      year: 2023,
-      mileage: "12,000 km",
-      image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop",
-      features: ["Automatic", "5 Seats", "Premium Sound", "GPS Navigation", "Leather Seats", "Sunroof"],
-      fuel: "Petrol",
-      transmission: "Automatic",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore"]
-    },
-    {
-      id: 7,
-      name: "BMW 5 Series",
-      category: "Luxury",
-      price: 7885,
-      originalPrice: 9000,
-      rating: 4.8,
-      reviews: 289,
-      year: 2023,
-      mileage: "15,000 km",
-      image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop",
-      features: ["Automatic", "5 Seats", "Leather Seats", "Sunroof", "Heated Seats", "360° Camera"],
-      fuel: "Petrol",
-      transmission: "Automatic",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Pune"]
-    },
-    {
-      id: 8,
-      name: "Audi A6",
-      category: "Premium",
-      price: 6557,
-      originalPrice: 7500,
-      rating: 4.7,
-      reviews: 412,
-      year: 2022,
-      mileage: "18,000 km",
-      image: "https://images.unsplash.com/photo-1606664515525-b6b8906a5bf8?w=800&h=600&fit=crop",
-      features: ["Automatic", "5 Seats", "Quattro AWD", "Virtual Cockpit", "Matrix LED", "Bang & Olufsen"],
-      fuel: "Petrol",
-      transmission: "Automatic",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Hyderabad"]
-    },
-    {
-      id: 9,
-      name: "Tata Indigo/Indica",
-      category: "Budget Taxi",
-      price: 999,
-      originalPrice: 1299,
-      rating: 4.3,
-      reviews: 4567,
-      year: 2022,
-      mileage: "40,000 km",
-      image: "https://images.unsplash.com/photo-1606664515525-b6b8906a5bf8?w=800&h=600&fit=crop",
-      features: ["Manual", "5 Seats", "AC", "Economical", "Reliable", "Easy Maintenance"],
-      fuel: "Petrol/CNG",
-      transmission: "Manual",
-      insurance: "Included",
-      seats: 5,
-      availability: "Available",
-      pickupLocations: ["Delhi", "Mumbai", "Bangalore", "Pune", "Kolkata", "Ahmedabad", "Jaipur"]
+const CarRental = ({ searchFilters, onClearSearch }) => {
+  const [cars, setCars] = useState([])
+  const [filteredCars, setFilteredCars] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'carRentals'))
+        const carsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setCars(carsData)
+        setFilteredCars(carsData)
+      } catch (error) {
+        console.error('Error fetching cars:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchCars()
+  }, [])
+
+  useEffect(() => {
+    if (searchFilters) {
+      let filtered = [...cars]
+
+      // Filter by destination (to) - if car has destination field
+      if (searchFilters.to) {
+        filtered = filtered.filter(car => {
+          // If car has destination field, use it; otherwise, skip this filter
+          if (car.destination) {
+            return car.destination.toLowerCase().includes(searchFilters.to.toLowerCase())
+          }
+          return true // If no destination field, include the car
+        })
+      }
+
+      // Filter by date - check availability
+      if (searchFilters.date) {
+        filtered = filtered.filter(car => 
+          car.availability === 'Available' || car.availability === 'Limited'
+        )
+      }
+
+      setFilteredCars(filtered)
+    } else {
+      setFilteredCars(cars)
+    }
+  }, [searchFilters, cars])
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
@@ -192,14 +72,61 @@ const CarRental = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5 tracking-tight">
             Car Rental
           </h2>
+          {searchFilters && (
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-sm text-gray-600 font-medium">Search Results:</span>
+              {searchFilters.to && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+                  Destination: {searchFilters.to}
+                </span>
+              )}
+              {searchFilters.date && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+                  Date: {new Date(searchFilters.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                </span>
+              )}
+              {onClearSearch && (
+                <button
+                  onClick={onClearSearch}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear Search
+                </button>
+              )}
+            </div>
+          )}
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
-            Choose from our diverse fleet of popular Indian taxi vehicles and premium luxury cars with comprehensive insurance and 24/7 support
+            {searchFilters 
+              ? `Found ${filteredCars.length} car${filteredCars.length !== 1 ? 's' : ''} matching your search`
+              : 'Choose from our diverse fleet of popular Indian taxi vehicles and premium luxury cars with comprehensive insurance and 24/7 support'
+            }
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-primary-700 mx-auto mt-8 rounded"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cars.map((car) => (
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <p className="mt-4 text-gray-600">Loading cars...</p>
+          </div>
+        ) : filteredCars.length === 0 ? (
+          <div className="text-center py-20">
+            {searchFilters ? (
+              <>
+                <p className="text-gray-600 text-lg font-semibold mb-2">No cars found matching your search criteria.</p>
+                <p className="text-sm text-gray-500">Try adjusting your search filters or browse all available cars.</p>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-600">No cars available at the moment.</p>
+                <p className="text-sm text-gray-500 mt-2">Add cars from the admin portal to see them here.</p>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredCars.map((car) => (
             <div
               key={car.id}
               className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group border border-gray-100"
@@ -228,7 +155,7 @@ const CarRental = () => {
                   <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-4 py-2.5 rounded-xl shadow-xl">
                     <div className="flex items-baseline justify-between">
                       <div>
-                        <span className="text-2xl font-bold">₹{formatPrice(car.price)}</span>
+                        <span className="text-2xl font-bold">₹{formatPrice(car.price || 0)}</span>
                         <span className="text-xs opacity-90">/day</span>
                       </div>
                       {car.originalPrice && (
@@ -251,13 +178,25 @@ const CarRental = () => {
                   </span>
                 </div>
 
-                <div className="flex items-center text-xs text-gray-500 mb-4 pb-4 border-b border-gray-200">
-                  <Calendar className="h-3 w-3 mr-1 text-primary-600" />
-                  <span>{car.year}</span>
-                  <span className="mx-2">•</span>
-                  <Gauge className="h-3 w-3 mr-1 text-primary-600" />
-                  <span>{car.mileage}</span>
-                </div>
+                {(car.year || car.mileage) && (
+                  <div className="flex items-center text-xs text-gray-500 mb-4 pb-4 border-b border-gray-200">
+                    {car.year && (
+                      <>
+                        <Calendar className="h-3 w-3 mr-1 text-primary-600" />
+                        <span>{car.year}</span>
+                      </>
+                    )}
+                    {car.year && car.mileage && (
+                      <span className="mx-2">•</span>
+                    )}
+                    {car.mileage && (
+                      <>
+                        <Gauge className="h-3 w-3 mr-1 text-primary-600" />
+                        <span>{car.mileage}</span>
+                      </>
+                    )}
+                  </div>
+                )}
                 
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div className="flex items-center text-xs text-gray-600 bg-gray-50 p-2 rounded-lg">
@@ -281,33 +220,40 @@ const CarRental = () => {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <h4 className="text-xs font-bold text-gray-900 mb-2">Key Features:</h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {car.features.slice(0, 4).map((feature, index) => (
-                      <span
-                        key={index}
-                        className="text-xs bg-primary-50 text-primary-700 px-2.5 py-1 rounded-md font-medium border border-primary-100"
-                      >
-                        {feature}
-                      </span>
-                    ))}
+                {car.features && Array.isArray(car.features) && car.features.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-xs font-bold text-gray-900 mb-2">Key Features:</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {car.features.slice(0, 4).map((feature, index) => (
+                        <span
+                          key={index}
+                          className="text-xs bg-primary-50 text-primary-700 px-2.5 py-1 rounded-md font-medium border border-primary-100"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="mb-4 p-2 bg-gray-50 rounded-lg">
-                  <div className="flex items-center text-xs text-gray-600">
-                    <MapPin className="h-3 w-3 mr-1 text-primary-600" />
-                    <span className="font-medium">Pickup: </span>
-                    <span className="ml-1">{car.pickupLocations.slice(0, 2).join(", ")} +{car.pickupLocations.length - 2} more</span>
+                {car.pickupLocations && Array.isArray(car.pickupLocations) && car.pickupLocations.length > 0 && (
+                  <div className="mb-4 p-2 bg-gray-50 rounded-lg">
+                    <div className="flex items-center text-xs text-gray-600">
+                      <MapPin className="h-3 w-3 mr-1 text-primary-600" />
+                      <span className="font-medium">Pickup: </span>
+                      <span className="ml-1">
+                        {car.pickupLocations.slice(0, 2).join(", ")}
+                        {car.pickupLocations.length > 2 && ` +${car.pickupLocations.length - 2} more`}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <div>
                     <div className="text-xs text-gray-500 mb-1">Starting from</div>
                     <div>
-                      <span className="text-2xl font-bold text-primary-600">₹{formatPrice(car.price)}</span>
+                      <span className="text-2xl font-bold text-primary-600">₹{formatPrice(car.price || 0)}</span>
                       <span className="text-sm text-gray-600">/day</span>
                     </div>
                   </div>
@@ -319,7 +265,8 @@ const CarRental = () => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
 
         <div className="text-center mt-16">
           <button className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-10 py-4 rounded-xl font-bold hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center space-x-2 mx-auto uppercase tracking-wide">

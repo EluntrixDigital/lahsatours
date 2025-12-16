@@ -1,63 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import { Star, Quote } from 'lucide-react'
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      id: 1,
-      name: "Rajesh Kumar",
-      location: "Mumbai, Maharashtra",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      text: "Amazing experience with Lahsa Tours! The Goa Beach Paradise package was absolutely perfect. Everything was well-organized, from accommodation to activities. Highly recommended!",
-      package: "Goa Beach Paradise"
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      location: "Delhi, NCR",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-      text: "Best travel agency I've ever used! The Kerala Backwaters package exceeded all expectations. The houseboat stay and Ayurvedic spa were incredible. Truly memorable!",
-      package: "Kerala Backwaters"
-    },
-    {
-      id: 3,
-      name: "Amit Patel",
-      location: "Bangalore, Karnataka",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      text: "Rented a Mercedes E-Class for our family trip to Rajasthan. The car was in excellent condition, and the service was top-notch. Will definitely use again!",
-      package: "Car Rental"
-    },
-    {
-      id: 4,
-      name: "Sneha Reddy",
-      location: "Hyderabad, Telangana",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      text: "The Rajasthan Royal Heritage tour was a dream come true! Every detail was perfect, and we got to experience authentic royal culture. Thank you Lahsa Tours!",
-      package: "Rajasthan Royal Heritage"
-    },
-    {
-      id: 5,
-      name: "Vikram Singh",
-      location: "Pune, Maharashtra",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-      text: "Outstanding service! The Himalayan Adventure package was incredible. The mountain views and trekking experience were unforgettable. Great value for money!",
-      package: "Himalayan Adventure"
-    },
-    {
-      id: 6,
-      name: "Ananya Das",
-      location: "Kolkata, West Bengal",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-      text: "Andaman was magical! The Island Escape package was well-planned, and the beaches were breathtaking. Lahsa Tours made our honeymoon perfect!",
-      package: "Andaman Island Escape"
+  const [testimonials, setTestimonials] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'testimonials'))
+        const testimonialsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setTestimonials(testimonialsData)
+      } catch (error) {
+        console.error('Error fetching testimonials:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchTestimonials()
+  }, [])
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -75,8 +42,19 @@ const Testimonials = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-primary-700 mx-auto mt-8 rounded"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <p className="mt-4 text-gray-600">Loading testimonials...</p>
+          </div>
+        ) : testimonials.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-600">No testimonials available at the moment.</p>
+            <p className="text-sm text-gray-500 mt-2">Add testimonials from the admin portal to see them here.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
@@ -109,7 +87,8 @@ const Testimonials = () => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <div className="inline-flex items-center space-x-2 bg-primary-50 px-6 py-3 rounded-full">

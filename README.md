@@ -1,4 +1,4 @@
-# Lahsa Tours - Premium Travel & Tours Website
+# Varanasi Tours - Premium Travel & Tours Website
 
 A modern, premium React.js website for a travel and tours company featuring holiday packages, car rental services, and an intuitive search interface.
 
@@ -39,7 +39,7 @@ npm run build
 ## Project Structure
 
 ```
-lahsatours/
+varanasitours/
 ├── src/
 │   ├── components/
 │   │   ├── Banner.jsx

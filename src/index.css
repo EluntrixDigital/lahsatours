@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ant Design Customization */
+.ant-layout {
+  background: #f0f2f5;
+}
+
+.ant-card {
+  border-radius: 8px;
+}
+
+.ant-table {
+  background: #fff;
+}
+
 * {
   margin: 0;
   padding: 0;

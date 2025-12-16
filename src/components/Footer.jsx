@@ -9,7 +9,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="mb-4">
-              <span className="text-2xl font-bold">Lahsa Tours</span>
+              <span className="text-2xl font-bold">Varanasi Tours</span>
             </div>
             <p className="text-gray-400 mb-4">
               Your trusted partner for premium travel experiences. Discover the world with us.
@@ -62,15 +62,6 @@ const Footer = () => {
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition">Car Rental</a>
               </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition">Hotel Booking</a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition">Flight Booking</a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition">Travel Insurance</a>
-              </li>
             </ul>
           </div>
 
@@ -80,24 +71,48 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary-400 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-400">123 Connaught Place, New Delhi, Delhi 110001, India</span>
+                <span className="text-gray-400">Ashok Marg, Road, near Tibbati Temple, Sarnath, Varanasi, Uttar Pradesh 221007</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary-400 flex-shrink-0" />
-                <span className="text-gray-400">+91 11 2345 6789</span>
+                <span className="text-gray-400">88401 42147</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-primary-400 flex-shrink-0" />
-                <span className="text-gray-400">info@lahsatours.com</span>
+                <span className="text-gray-400">info@varanasitours.com</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400">
-            © {new Date().getFullYear()} Lahsa Tours. All rights reserved.
-          </p>
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="text-center mb-6">
+            <div className="flex flex-wrap justify-center items-center gap-3 text-sm">
+              <a href="/terms-conditions" className="text-gray-400 hover:text-white transition">Terms & Conditions</a>
+              <span className="text-gray-600">•</span>
+              <a href="/privacy-policy" className="text-gray-400 hover:text-white transition">Privacy Policy</a>
+              <span className="text-gray-600">•</span>
+              <a href="/refund-policy" className="text-gray-400 hover:text-white transition">Refund Policy</a>
+              <span className="text-gray-600">•</span>
+              <a href="/cancellation-policy" className="text-gray-400 hover:text-white transition">Cancellation Policy</a>
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-gray-400 mb-2">
+              © {new Date().getFullYear()} Varanasi Tours. All rights reserved.
+            </p>
+            <p className="text-gray-500 text-sm">
+              Designed and Developed by{' '}
+              <a 
+                href="http://eluntrixdigital.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary-400 hover:text-primary-300 transition-colors"
+              >
+                Eluntrix Digital
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

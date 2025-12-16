@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import logo from '../lhasalogo.png'
+import logo from '../varanasilogo.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -12,7 +12,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <img 
               src={logo} 
-              alt="Lahsa Tours Logo" 
+              alt="Varanasi Tours Logo" 
               className="h-40 w-auto object-contain"
             />
           </div>
